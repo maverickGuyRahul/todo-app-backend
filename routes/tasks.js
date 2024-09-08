@@ -1,11 +1,10 @@
-// routes/tasks.js
 import express from 'express';
 const router = express.Router();
 import Task from '../models/Task.js';
 import Counter from '../models/Counter.js'; // Import the counter model
 
 // GET all tasks
-router.get('/api/tasks', async (req, res) => {
+router.get('/task', async (req, res) => {
   try {
     const tasks = await Task.find();
     res.json(tasks);
@@ -15,13 +14,17 @@ router.get('/api/tasks', async (req, res) => {
 });
 
 // POST a new task
-router.post('/api/task', async (req, res) => {
+router.post('/task', async (req, res) => {
   try {
     const { description, status, dueDate, priority, assignedTo } = req.body;
 
     // Validate required fields
     if (!assignedTo) {
       return res.status(400).json({ message: 'AssignedTo is required' });
+    }
+
+    if (!description || !status || !dueDate || !priority) {
+      return res.status(400).json({ message: 'Missing required fields' });
     }
 
     // Find and increment the counter for externalId
@@ -49,7 +52,7 @@ router.post('/api/task', async (req, res) => {
 });
 
 // PUT/update a task by ExternalId
-router.put('/api/task/:externalId', async (req, res) => {
+router.put('/task/:externalId', async (req, res) => {
   try {
     const { externalId } = req.params;
     const { description, status, dueDate, priority, assignedTo } = req.body;
@@ -57,6 +60,10 @@ router.put('/api/task/:externalId', async (req, res) => {
     // Validate required fields
     if (!assignedTo) {
       return res.status(400).json({ message: 'AssignedTo is required' });
+    }
+
+    if (!description && !status && !dueDate && !priority) {
+      return res.status(400).json({ message: 'At least one field is required to update' });
     }
 
     const updatedTask = await Task.findOneAndUpdate(
@@ -76,7 +83,7 @@ router.put('/api/task/:externalId', async (req, res) => {
 });
 
 // DELETE a task by ExternalId
-router.delete('/api/task/:externalId', async (req, res) => {
+router.delete('/task/:externalId', async (req, res) => {
   try {
     const { externalId } = req.params;
     const deletedTask = await Task.findOneAndDelete({ externalId });

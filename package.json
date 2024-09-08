@@ -4,8 +4,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "mocha",
+    "start": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,8 +13,14 @@
   "description": "",
   "dependencies": {
     "body-parser": "^1.20.2",
-    "express": "^4.19.2",
+    "cors": "^2.8.5",
     "mongoose": "^8.6.1",
     "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "express": "^4.19.2",
+    "mocha": "^10.7.3",
+    "supertest": "^7.0.0"
   }
 }
